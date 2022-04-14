@@ -28,7 +28,7 @@ exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
-    /*Validate email and password */
+    /* Validate email and password */
     if (!email || !password) {
       return res.status(400).json({
         success: false,
@@ -36,7 +36,7 @@ exports.login = async (req, res, next) => {
       });
     }
 
-    /*Check for user */
+    /* Check for user */
     const user = await User.findOne({ email }).select("+password");
     if (!user) {
       return res
