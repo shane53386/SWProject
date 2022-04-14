@@ -32,16 +32,7 @@ const RestaurantSchema = new mongoose.Schema(
     },
     availabletime: {
       type: Object,
-      default: {
-        monday: [],
-        tuesday: [],
-        wednesday: [],
-        thursday: [],
-        friday: [],
-        saturday: [],
-        sunday: [],
-      },
-      required: true,
+      required: [true, "Please add restaurant's available times"],
     },
     createdAt: {
       type: Date,
