@@ -28,8 +28,7 @@ exports.getRestaurants = async (req, res, next) => {
   console.log("queryStr : ", queryStr);
 
   /* Finding resource */
-  /* TODO UNCOMMENT THE CODE BELOW TO POPULATE TO RESERVATIONS*/
-  // query = Restaurant.find(JSON.parse(queryStr)).populate("reservations");
+  query = Restaurant.find(JSON.parse(queryStr)).populate("reservations");
   query = Restaurant.find(JSON.parse(queryStr));
 
   /* Select Field */
@@ -258,7 +257,7 @@ function checkValidTime(dayArray) {
    */
 
   /* EX. 11:00:00.000*/
-  let timeFormat = /^\d\d:\d\d:\d\d(\.\d{3})?$/i;
+  let timeFormat = /^\d\d:\d\d:\d\d$/i;
 
   /* An Array must have length of 0 (for not open on that day) or 2 (which contains open and close time)*/
   if (!(dayArray.length === 2 || dayArray.length === 0)) {

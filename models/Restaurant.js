@@ -45,16 +45,16 @@ const RestaurantSchema = new mongoose.Schema(
   }
 );
 
-/* Cascade delete appointments when a restaurant is deleted */
-RestaurantSchema.pre("remove", async function (next) {
-  console.log(`Appointments being removed from restaurants ${this._id}`);
-  await this.model("Appointment").deleteMany({ restaurant: this._id });
-  next();
-});
+/* Cascade delete reservations when a restaurant is deleted */
+// RestaurantSchema.pre("remove", async function (next) {
+//   console.log(`Reservations being removed from restaurants ${this._id}`);
+//   await this.model("Reservation").deleteMany({ restaurant: this._id });
+//   next();
+// });
 
 /* Reverse populate with virtuals */
-RestaurantSchema.virtual("appointments", {
-  ref: "Appointment",
+RestaurantSchema.virtual("reservations", {
+  ref: "Reservation",
   localField: `_id`,
   foreignField: "restaurant",
   justOne: false,
