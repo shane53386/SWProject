@@ -139,6 +139,15 @@ exports.createRestaurant = async (req, res, next) => {
  * @access   Private
  */
 exports.updateRestaurant = async (req, res, next) => {
+  /* If any restaurant wants to update an available time, first, check whether if req.body is on the right format */
+  if (req.body.hasOwnProperty("availabletime")) {
+    const validation = checkValidCreatingRestaurantRecord(req.body);
+    if (!validation) {
+      console.log(`400 updateRestaurant (req.body ${validation})`);
+      res.status(400).json({ succuss: false });
+    }
+  }
+
   try {
     const restaurant = await Restaurant.findByIdAndUpdate(
       req.params.id,
