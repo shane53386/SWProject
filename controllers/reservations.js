@@ -126,6 +126,7 @@ exports.addReservation = async (req, res, next) => {
 		const opentime = restaurant.availabletime[day][0];
 		const closetime = restaurant.availabletime[day][1];
 
+		/* Check reserve time */
 		if (
 			!restaurant.availabletime[day].length ||
 			time < opentime ||
