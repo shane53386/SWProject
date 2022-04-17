@@ -11,6 +11,7 @@ connectDB();
 
 /* Route files */
 const auth = require("./routes/auth");
+const restaurants = require("./routes/restaurants");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(express.json());
 /* Cookie Parser */
 app.use(cookieParser());
 
+app.use("/api/v1/restaurants", restaurants);
 app.use("/api/v1/auth", auth);
 
 const PORT = process.env.PORT || 5000;

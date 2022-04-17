@@ -10,7 +10,6 @@ exports.protect = async (req, res, next) => {
     req.headers.authorization.startsWith("Bearer")
   ) {
     token = req.headers.authorization.split(" ")[1];
-    console.log(`token: ${token}`);
   }
 
   /* Make sure token exists */
@@ -20,6 +19,8 @@ exports.protect = async (req, res, next) => {
       message: "Not authorize to access this route",
     });
   }
+
+  console.log(`token: ${token}`);
 
   try {
     /* Try to verify token */
@@ -39,6 +40,9 @@ exports.protect = async (req, res, next) => {
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
+      console.log(
+        `User role ${req.user.role} is not authorized to access this route`
+      );
       return res.status(403).json({
         success: false,
         message: `User role ${req.user.role} is not authorized to access this route`,
