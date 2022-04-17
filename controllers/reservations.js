@@ -1,15 +1,22 @@
 const Restaurant = require("../models/Restaurant");
 const Reservation = require("../models/Reservation");
 
+/*
+ * @desc     Get all reservations
+ * @routes   GET /api/v1/reservations
+ * @access   Public
+ */
 exports.getReservations = async (req, res, next) => {
 	let query;
 
+	/* Not admin */
 	if (req.user.role !== "admin") {
 		query = Reservation.find({ user: req.user.id }).populate({
 			path: "restaurant",
 			select: "name address tel",
 		});
 	} else {
+		/* Specific restaurant */
 		if (req.params.restaurantId) {
 			query = Reservation.find({
 				restaurant: req.params.restaurantId,
@@ -41,6 +48,11 @@ exports.getReservations = async (req, res, next) => {
 	}
 };
 
+/*
+ * @desc     Get a reservation
+ * @routes   GET /api/v1/reservations/:id
+ * @access   Public
+ */
 exports.getReservation = async (req, res, next) => {
 	try {
 		const reservation = await Reservation.findById(req.params.id).populate({
@@ -67,6 +79,11 @@ exports.getReservation = async (req, res, next) => {
 	}
 };
 
+/*
+ * @desc     Create a reservation
+ * @routes   POST /api/v1/restaurants/:restaurantId/reservations
+ * @access   Public
+ */
 exports.addReservation = async (req, res, next) => {
 	try {
 		req.body.restaurant = req.params.restaurantId;
@@ -80,14 +97,43 @@ exports.addReservation = async (req, res, next) => {
 		}
 
 		req.body.user = req.user.id;
+
+		/* Find exist reservation */
 		const existedReservations = await Reservation.find({
 			user: req.user.id,
 		});
 
+		/* Check if exist reservation more than 3 or user is admin */
 		if (existedReservations.length >= 3 && req.user.role !== "admin") {
 			return res.status(400).json({
 				success: false,
 				message: `The user with ID ${req.user.id} have already made 3 reservations`,
+			});
+		}
+
+		const days = [
+			"sunday",
+			"monday",
+			"tuesday",
+			"wednesday",
+			"thursday",
+			"friday",
+			"saturday",
+		];
+		const date = new Date(req.body.reservedDate);
+		const day = days[date.getDay()];
+		const time = date.toUTCString().split(" ")[4];
+		const opentime = restaurant.availabletime[day][0];
+		const closetime = restaurant.availabletime[day][1];
+
+		if (
+			!restaurant.availabletime[day].length ||
+			time < opentime ||
+			time > closetime
+		) {
+			return res.status(500).json({
+				success: false,
+				message: `Cannot reserve at this time`,
 			});
 		}
 
@@ -106,6 +152,12 @@ exports.addReservation = async (req, res, next) => {
 	}
 };
 
+
+/*
+ * @desc     Update a reservation
+ * @routes   PUT /api/v1/reservations/:id
+ * @access   Public
+ */
 exports.updateReservation = async (req, res, next) => {
 	try {
 		let reservation = await Reservation.findById(req.params.id);
@@ -148,6 +200,12 @@ exports.updateReservation = async (req, res, next) => {
 	}
 };
 
+
+/*
+ * @desc     Delete a reservation
+ * @routes   DELETE /api/v1/reservations/:id
+ * @access   Public
+ */
 exports.deleteReservation = async (req, res, next) => {
 	try {
 		const reservation = await Reservation.findById(req.params.id);
