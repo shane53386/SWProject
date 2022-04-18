@@ -3,10 +3,18 @@ const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
 
+/* Import security module */
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const xss = require("xss-clean");
+const rateLimit = require("express-rate-limit");
+const hpp = require("hpp");
+const cors = require("cors");
+
 /* Load env vars */
 dotenv.config({ path: "./config/config.env" });
 
-/* Connect to databse */
+/* Connect to database */
 connectDB();
 
 /* Route files */
@@ -21,6 +29,18 @@ app.use(express.json());
 
 /* Cookie Parser */
 app.use(cookieParser());
+
+/* Security */
+const limiter = rateLimit({
+	windowsMs: 10 * 60 * 1000,
+	max: 100,
+});
+app.use(mongoSanitize());
+app.use(helmet());
+app.use(xss());
+app.use(limiter);
+app.use(hpp());
+app.use(cors());
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/restaurants", restaurants);

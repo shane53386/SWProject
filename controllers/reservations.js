@@ -153,7 +153,6 @@ exports.addReservation = async (req, res, next) => {
 	}
 };
 
-
 /*
  * @desc     Update a reservation
  * @routes   PUT /api/v1/reservations/:id
@@ -200,7 +199,6 @@ exports.updateReservation = async (req, res, next) => {
 		});
 	}
 };
-
 
 /*
  * @desc     Delete a reservation
