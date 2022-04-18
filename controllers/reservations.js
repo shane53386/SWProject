@@ -4,7 +4,7 @@ const Reservation = require("../models/Reservation");
 /*
  * @desc     Get All reservations
  * @routes   GET /api/v1/reservations
- * @access   Public
+ * @access   Private
  */
 exports.getReservations = async (req, res, next) => {
   let query;
@@ -51,7 +51,7 @@ exports.getReservations = async (req, res, next) => {
 /*
  * @desc     Get a reservation
  * @routes   GET /api/v1/reservations/:id
- * @access   Public
+ * @access   Private
  */
 exports.getReservation = async (req, res, next) => {
   try {
