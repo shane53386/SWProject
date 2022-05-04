@@ -9,35 +9,20 @@ const RestaurantSchema = new mongoose.Schema(
       trim: true,
       maxlength: [50, "Name can not be more tan 50 characters"],
     },
-
-    address: {
-      type: String,
-      required: [true, "Please add an address"],
-    },
-    district: {
-      type: String,
-      required: [true, "Please add a district"],
-    },
-    province: {
-      type: String,
-      required: [true, "Please add a province"],
-    },
+    address: { type: String, required: [true, "Please add an address"] },
+    district: { type: String, required: [true, "Please add a district"] },
+    province: { type: String, required: [true, "Please add a province"] },
     postalcode: {
       type: String,
       required: [true, "Please add a postalcode"],
       maxlength: [5, "Postal Code can not be more than 5 digits"],
     },
-    tel: {
-      type: String,
-    },
+    tel: { type: String },
     availabletime: {
       type: Object,
       required: [true, "Please add restaurant's available times"],
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+    createdAt: { type: Date, default: Date.now },
   },
   {
     toJSON: { virtuals: true },
